@@ -1,6 +1,6 @@
-import 'package:debate_tournament_app/screens/dash_screen.dart';
-import 'package:debate_tournament_app/screens/login_screen.dart';
-import 'package:debate_tournament_app/screens/register_screen.dart';
+import 'package:tabdeb/screens/dash_screen.dart';
+import 'package:tabdeb/screens/login_screen.dart';
+import 'package:tabdeb/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -108,10 +108,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
                     // Logo/Icon
                     Container(
-                      width: 100,
-                      height: 100,
+                      width: 120,
+                      height: 120,
                       decoration: BoxDecoration(
-                        color: Colors.white,
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
@@ -121,10 +120,11 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                           ),
                         ],
                       ),
-                      child: const Icon(
-                        Icons.sports,
-                        size: 56,
-                        color: Colors.blue,
+                      child: ClipOval(
+                        child: Image.asset(
+                          'assets/icons/app_icon.png',
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
 
@@ -146,9 +146,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     const FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
-                        'Debate Tournament',
+                        'TabDeb',
                         style: TextStyle(
-                          fontSize: 32,
+                          fontSize: 42,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                           letterSpacing: 0.5,
@@ -158,20 +158,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
                     const SizedBox(height: 2),
 
-                    const Text(
-                      'Tab System',
-                      style: TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-
-                    const SizedBox(height: 12),
-
                     Text(
-                      'Manage tournaments with ease',
+                      'Debate Tournament Tab System',
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.white.withOpacity(0.9),
@@ -245,7 +233,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
                     // Footer Text
                     Text(
-                      '© 2025 Debate Tournament Tab System',
+                      '© 2026 TabDeb',
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.white.withOpacity(0.7),

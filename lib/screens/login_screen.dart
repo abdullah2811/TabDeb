@@ -1,4 +1,4 @@
-import 'package:debate_tournament_app/screens/dash_screen.dart';
+import 'package:tabdeb/screens/dash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -292,14 +292,14 @@ class _LoginScreenState extends State<LoginScreen> {
   String _maskEmail(String email) {
     final parts = email.split('@');
     if (parts.length != 2) return email;
-    
+
     final name = parts[0];
     final domain = parts[1];
-    
+
     if (name.length <= 2) {
       return '${name[0]}***@$domain';
     }
-    
+
     return '${name.substring(0, 2)}***@$domain';
   }
 

@@ -3,7 +3,7 @@ import 'debate_team.dart';
 import 'debate_match.dart';
 import 'debater.dart';
 import 'tournament_segment.dart';
-import 'package:debate_tournament_app/models/user.dart';
+import 'package:tabdeb/models/user.dart';
 
 enum TournamentFormat {
   asianParliamentary,

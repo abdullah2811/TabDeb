@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:debate_tournament_app/models/tournament.dart';
-import 'package:debate_tournament_app/models/user.dart';
-import 'package:debate_tournament_app/screens/add_teams_screen.dart';
-import 'package:debate_tournament_app/screens/matchup_screen.dart';
-import 'package:debate_tournament_app/screens/tournament_details_screen.dart';
-import 'package:debate_tournament_app/screens/tournament_roadmap_screen.dart';
+import 'package:tabdeb/models/tournament.dart';
+import 'package:tabdeb/models/user.dart';
+import 'package:tabdeb/screens/add_teams_screen.dart';
+import 'package:tabdeb/screens/matchup_screen.dart';
+import 'package:tabdeb/screens/tournament_details_screen.dart';
+import 'package:tabdeb/screens/tournament_roadmap_screen.dart';
 import 'package:flutter/material.dart';
 
 class OwnTournamentsScreen extends StatefulWidget {

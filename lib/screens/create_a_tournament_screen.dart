@@ -1,11 +1,11 @@
-import 'package:debate_tournament_app/models/app.dart';
+import 'package:tabdeb/models/app.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:uuid/uuid.dart';
 import '../models/tournament.dart';
 import 'dash_screen.dart';
-import 'package:debate_tournament_app/models/user.dart';
+import 'package:tabdeb/models/user.dart';
 
 class CreateATournamentScreen extends StatefulWidget {
   final User? creatorUser;

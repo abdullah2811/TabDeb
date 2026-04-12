@@ -17,7 +17,7 @@ class DebateTournamentApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Debate Tournament Tab System',
+      title: 'TabDeb',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -71,10 +71,11 @@ class SplashScreen extends StatelessWidget {
                     ],
                   ),
                   child: Center(
-                    child: Icon(
-                      Icons.sports,
-                      size: 90,
-                      color: Colors.blue.shade700,
+                    child: ClipOval(
+                      child: Image.asset(
+                        'assets/icons/app_icon.png',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),

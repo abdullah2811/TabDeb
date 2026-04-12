@@ -1,4 +1,4 @@
-import 'package:debate_tournament_app/models/tournament.dart';
+import 'package:tabdeb/models/tournament.dart';
 
 import '../models/debate_match.dart';
 import '../models/debate_team.dart';

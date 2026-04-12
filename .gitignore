@@ -43,3 +43,13 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Python backend secrets and environments
+backend/.env
+backend/*-firebase-adminsdk-*.json
+backend/.venv/
+backend/venv/
+.venv/
+
+# Firebase local cache/output
+.firebase/

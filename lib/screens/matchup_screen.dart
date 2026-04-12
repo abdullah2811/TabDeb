@@ -1,6 +1,7 @@
-import 'package:debate_tournament_app/models/debate_match.dart';
-import 'package:debate_tournament_app/models/tournament.dart';
+import 'package:tabdeb/models/debate_match.dart';
+import 'package:tabdeb/models/tournament.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -52,14 +53,6 @@ class _MatchupScreenState extends State<MatchupScreen> {
         : null;
     if (segments == null || currentSegment == null) return false;
     return segments.last.segmentID == currentSegment.segmentID;
-  }
-
-  bool get _isNextSegmentTabRound {
-    final segments = widget.currentTournament.tournamentSegments;
-    if (segments == null || _isFinalSegment) return false;
-    final nextSegmentIndex = widget.currentTournament.currentSegmentIndex + 1;
-    if (nextSegmentIndex >= segments.length) return false;
-    return segments[nextSegmentIndex].isTabRound;
   }
 
   void _showEliminateTeamDialog() {
@@ -255,6 +248,10 @@ class _MatchupScreenState extends State<MatchupScreen> {
             .segmentName
         : 'Round';
 
+    // Load app icon
+    final iconData = await rootBundle.load('assets/icons/app_icon.png');
+    final iconImage = pw.MemoryImage(iconData.buffer.asUint8List());
+
     final pdf = pw.Document();
 
     pdf.addPage(
@@ -263,7 +260,24 @@ class _MatchupScreenState extends State<MatchupScreen> {
         margin: const pw.EdgeInsets.all(32),
         build: (pw.Context context) {
           return [
-            // Header
+            // TabDeb Branding Header
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.center,
+              children: [
+                pw.Image(iconImage, width: 40, height: 40),
+                pw.SizedBox(width: 12),
+                pw.Text(
+                  'TabDeb',
+                  style: pw.TextStyle(
+                    fontSize: 28,
+                    fontWeight: pw.FontWeight.bold,
+                    color: PdfColors.blue800,
+                  ),
+                ),
+              ],
+            ),
+            pw.SizedBox(height: 16),
+            // Tournament Header
             pw.Center(
               child: pw.Text(
                 widget.currentTournament.tournamentName,
@@ -447,6 +461,10 @@ class _MatchupScreenState extends State<MatchupScreen> {
             .segmentName
         : 'Round';
 
+    // Load app icon
+    final iconData = await rootBundle.load('assets/icons/app_icon.png');
+    final iconImage = pw.MemoryImage(iconData.buffer.asUint8List());
+
     final pdf = pw.Document();
 
     pdf.addPage(
@@ -455,6 +473,23 @@ class _MatchupScreenState extends State<MatchupScreen> {
         margin: const pw.EdgeInsets.all(32),
         build: (pw.Context context) {
           return [
+            // TabDeb Branding Header
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.center,
+              children: [
+                pw.Image(iconImage, width: 40, height: 40),
+                pw.SizedBox(width: 12),
+                pw.Text(
+                  'TabDeb',
+                  style: pw.TextStyle(
+                    fontSize: 28,
+                    fontWeight: pw.FontWeight.bold,
+                    color: PdfColors.blue800,
+                  ),
+                ),
+              ],
+            ),
+            pw.SizedBox(height: 16),
             pw.Center(
               child: pw.Text(
                 widget.currentTournament.tournamentName,
@@ -606,6 +641,10 @@ class _MatchupScreenState extends State<MatchupScreen> {
             .segmentName
         : 'Round';
 
+    // Load app icon
+    final iconData = await rootBundle.load('assets/icons/app_icon.png');
+    final iconImage = pw.MemoryImage(iconData.buffer.asUint8List());
+
     final pdf = pw.Document();
 
     pdf.addPage(
@@ -614,6 +653,23 @@ class _MatchupScreenState extends State<MatchupScreen> {
         margin: const pw.EdgeInsets.all(32),
         build: (pw.Context context) {
           return [
+            // TabDeb Branding Header
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.center,
+              children: [
+                pw.Image(iconImage, width: 40, height: 40),
+                pw.SizedBox(width: 12),
+                pw.Text(
+                  'TabDeb',
+                  style: pw.TextStyle(
+                    fontSize: 28,
+                    fontWeight: pw.FontWeight.bold,
+                    color: PdfColors.blue800,
+                  ),
+                ),
+              ],
+            ),
+            pw.SizedBox(height: 16),
             pw.Center(
               child: pw.Text(
                 widget.currentTournament.tournamentName,

@@ -1,5 +1,5 @@
-import 'package:debate_tournament_app/models/debate_match.dart';
-import 'package:debate_tournament_app/models/debate_team.dart';
+import 'package:tabdeb/models/debate_match.dart';
+import 'package:tabdeb/models/debate_team.dart';
 
 class TournamentSegment {
   String segmentName;

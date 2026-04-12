@@ -1,4 +1,4 @@
-import 'package:debate_tournament_app/screens/welcome_screen.dart';
+import 'package:tabdeb/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../models/user.dart' as app_user;

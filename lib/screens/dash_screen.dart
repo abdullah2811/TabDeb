@@ -1,9 +1,10 @@
-import 'package:debate_tournament_app/screens/create_a_tournament_screen.dart';
-import 'package:debate_tournament_app/screens/own_tournaments_screen.dart';
-import 'package:debate_tournament_app/screens/search_debaters_screen.dart';
-import 'package:debate_tournament_app/screens/search_tournaments_screen.dart';
-import 'package:debate_tournament_app/screens/timer_screen.dart';
-import 'package:debate_tournament_app/screens/welcome_screen.dart';
+import 'package:tabdeb/screens/create_a_tournament_screen.dart';
+import 'package:tabdeb/screens/own_tournaments_screen.dart';
+import 'package:tabdeb/screens/search_debaters_screen.dart';
+import 'package:tabdeb/screens/search_tournaments_screen.dart';
+import 'package:tabdeb/screens/summarizer.dart';
+import 'package:tabdeb/screens/timer_screen.dart';
+import 'package:tabdeb/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -371,6 +372,27 @@ class _DashScreenState extends State<DashScreen> {
 
                   if (widget.isRegistered) const SizedBox(height: 12),
 
+                  // AI Summarization Button (Only for registered users)
+                  if (widget.isRegistered)
+                    _buildActionCard(
+                      context: context,
+                      icon: Icons.smart_toy,
+                      title: 'AI Summarization',
+                      subtitle:
+                          'Record speech, transcribe, summarize, and export PDF',
+                      color: Colors.pink,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SummarizerScreen(),
+                          ),
+                        );
+                      },
+                    ),
+
+                  if (widget.isRegistered) const SizedBox(height: 12),
+
                   // Search Tournaments Card
                   _buildActionCard(
                     context: context,
@@ -431,26 +453,17 @@ class _DashScreenState extends State<DashScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.blue.shade600,
-                              Colors.blue.shade400
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Icon(
-                          Icons.gavel,
-                          color: Colors.white,
-                          size: 24,
+                      SizedBox(
+                        width: 82,
+                        height: 82,
+                        child: Image.asset(
+                          'assets/icons/app_icon.png',
+                          fit: BoxFit.contain,
                         ),
                       ),
                       const SizedBox(width: 12),
                       const Text(
-                        'Debate Tournament Manager',
+                        'TabDeb',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,

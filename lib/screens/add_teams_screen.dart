@@ -1,5 +1,5 @@
-import 'package:debate_tournament_app/models/app.dart';
-import 'package:debate_tournament_app/models/tournament.dart';
+import 'package:tabdeb/models/app.dart';
+import 'package:tabdeb/models/tournament.dart';
 import 'package:flutter/material.dart';
 import '../models/debate_team.dart';
 import '../models/debater.dart';

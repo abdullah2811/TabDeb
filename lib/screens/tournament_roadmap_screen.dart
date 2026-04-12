@@ -1,5 +1,5 @@
-import 'package:debate_tournament_app/models/tournament.dart';
-import 'package:debate_tournament_app/models/tournament_segment.dart';
+import 'package:tabdeb/models/tournament.dart';
+import 'package:tabdeb/models/tournament_segment.dart';
 import 'package:flutter/material.dart';
 
 class TournamentRoadmapScreen extends StatefulWidget {

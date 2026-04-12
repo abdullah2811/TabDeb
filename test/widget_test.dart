@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:debate_tournament_app/flutter_main.dart';
+import 'package:tabdeb/flutter_main.dart';
 
 void main() {
   testWidgets('App loads correctly', (WidgetTester tester) async {

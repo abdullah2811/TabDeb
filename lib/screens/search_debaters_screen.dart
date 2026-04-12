@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:debate_tournament_app/models/user.dart';
+import 'package:tabdeb/models/user.dart';
 import 'debater_details_screen.dart';
 
 class SearchDebatersScreen extends StatefulWidget {

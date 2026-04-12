@@ -1,4 +1,4 @@
-name: debate_tournament_app
+name: tabdeb
 description: A Flutter application for managing debate tournaments and tabulation.
 
 publish_to: 'none'
@@ -24,6 +24,8 @@ dependencies:
   printing: ^5.13.3
   url_launcher: ^6.3.2
   flutter_svg: ^2.2.3
+  record: ^6.2.0
+  http: ^1.2.2
 
 dev_dependencies:
   flutter_test:
