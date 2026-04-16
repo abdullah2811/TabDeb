@@ -1210,7 +1210,7 @@ class _MatchupScreenState extends State<MatchupScreen> {
             child: const Text('Cancel'),
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               // Validate all fields are filled
               final govScores = [
                 govDeb1.text.trim(),
@@ -1234,15 +1234,52 @@ class _MatchupScreenState extends State<MatchupScreen> {
                 return;
               }
 
+              final parsedGovScores = govScores.map(int.tryParse).toList();
+              final parsedOppScores = oppScores.map(int.tryParse).toList();
+              if (parsedGovScores.any((s) => s == null) ||
+                  parsedOppScores.any((s) => s == null)) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Please enter valid numeric scores.'),
+                  ),
+                );
+                return;
+              }
+
+              final govTotal = _calculateTeamTotal(
+                parsedGovScores.take(3).cast<int>().toList(),
+                parsedGovScores[3]!,
+              );
+              final oppTotal = _calculateTeamTotal(
+                parsedOppScores.take(3).cast<int>().toList(),
+                parsedOppScores[3]!,
+              );
+
+              if (govTotal == oppTotal) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content:
+                        Text("Both teams can't have the same total score."),
+                  ),
+                );
+                return;
+              }
+
               try {
                 if (isEditing) {
-                  _editMatchScores(match, govScores, oppScores);
+                  _editMatchScores(
+                    match,
+                    parsedGovScores.take(3).cast<int>().toList(),
+                    parsedOppScores.take(3).cast<int>().toList(),
+                    parsedGovScores[3]!,
+                    parsedOppScores[3]!,
+                  );
                 } else {
                   match.submitScores(
-                    govScores.map(int.parse).toList().sublist(0, 3),
-                    oppScores.map(int.parse).toList().sublist(0, 3),
-                    int.parse(govScores[3]),
-                    int.parse(oppScores[3]),
+                    parsedGovScores.take(3).cast<int>().toList(),
+                    parsedOppScores.take(3).cast<int>().toList(),
+                    parsedGovScores[3]!,
+                    parsedOppScores[3]!,
                     widget.currentTournament,
                   );
                 }
@@ -1270,10 +1307,11 @@ class _MatchupScreenState extends State<MatchupScreen> {
                 }
 
                 //Update firestore
-                widget.currentTournament.updateTournament();
+                await widget.currentTournament.updateTournament();
                 // Update widget state
                 setState(() {});
 
+                if (!mounted) return;
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -1295,12 +1333,18 @@ class _MatchupScreenState extends State<MatchupScreen> {
   }
 
   void _editMatchScores(
-      DebateMatch match, List<String> govScores, List<String> oppScores) {
-    // Parse new scores
-    final newGovDebScores = govScores.sublist(0, 3).map(int.parse).toList();
-    final newOppDebScores = oppScores.sublist(0, 3).map(int.parse).toList();
-    final newGovRebuttal = int.parse(govScores[3]);
-    final newOppRebuttal = int.parse(oppScores[3]);
+    DebateMatch match,
+    List<int> newGovDebScores,
+    List<int> newOppDebScores,
+    int newGovRebuttal,
+    int newOppRebuttal,
+  ) {
+    final newGovTotal = _calculateTeamTotal(newGovDebScores, newGovRebuttal);
+    final newOppTotal = _calculateTeamTotal(newOppDebScores, newOppRebuttal);
+
+    if (newGovTotal == newOppTotal) {
+      throw Exception("Both teams can't have the same total score.");
+    }
 
     // Get old scores to calculate the difference
     final oldGovDebScores = match.teamAScores;
@@ -1309,24 +1353,10 @@ class _MatchupScreenState extends State<MatchupScreen> {
     final oldOppRebuttal = match.teamBRebuttal;
 
     // Calculate old totals (including rebuttal)
-    int oldGovTotal = oldGovDebScores[0] +
-        oldGovDebScores[1] +
-        oldGovDebScores[2] +
-        oldGovRebuttal;
-    int oldOppTotal = oldOppDebScores[0] +
-        oldOppDebScores[1] +
-        oldOppDebScores[2] +
-        oldOppRebuttal;
-
-    // Calculate new totals (including rebuttal)
-    int newGovTotal = newGovDebScores[0] +
-        newGovDebScores[1] +
-        newGovDebScores[2] +
-        newGovRebuttal;
-    int newOppTotal = newOppDebScores[0] +
-        newOppDebScores[1] +
-        newOppDebScores[2] +
-        newOppRebuttal;
+    final oldGovTotal = _calculateTeamTotal(oldGovDebScores, oldGovRebuttal);
+    final oldOppTotal = _calculateTeamTotal(oldOppDebScores, oldOppRebuttal);
+    final oldWinner = _getWinner(oldGovTotal, oldOppTotal);
+    final newWinner = _getWinner(newGovTotal, newOppTotal);
 
     // Update individual debater scores
     for (int i = 0; i < 3; i++) {
@@ -1375,11 +1405,58 @@ class _MatchupScreenState extends State<MatchupScreen> {
     tournamentTeamA.increaseTeamScore(teamScoreDifA);
     tournamentTeamB.increaseTeamScore(teamScoreDifB);
 
+    if (oldWinner != newWinner) {
+      _removePreviousOutcome(match.teamA, oldWinner == 'A');
+      _removePreviousOutcome(match.teamB, oldWinner == 'B');
+      _applyOutcome(match.teamA, newWinner == 'A');
+      _applyOutcome(match.teamB, newWinner == 'B');
+
+      if (!identical(tournamentTeamA, match.teamA)) {
+        _removePreviousOutcome(tournamentTeamA, oldWinner == 'A');
+        _applyOutcome(tournamentTeamA, newWinner == 'A');
+      }
+      if (!identical(tournamentTeamB, match.teamB)) {
+        _removePreviousOutcome(tournamentTeamB, oldWinner == 'B');
+        _applyOutcome(tournamentTeamB, newWinner == 'B');
+      }
+    }
+
     // Update match scores and rebuttal scores
     match.teamAScores = newGovDebScores;
     match.teamBScores = newOppDebScores;
     match.teamARebuttal = newGovRebuttal;
     match.teamBRebuttal = newOppRebuttal;
+  }
+
+  int _calculateTeamTotal(List<int> speechScores, int rebuttalScore) {
+    return speechScores.fold<int>(0, (sum, score) => sum + score) +
+        rebuttalScore;
+  }
+
+  String _getWinner(int totalA, int totalB) {
+    if (totalA > totalB) return 'A';
+    if (totalB > totalA) return 'B';
+    throw Exception("Both teams can't have the same total score.");
+  }
+
+  void _removePreviousOutcome(dynamic team, bool wasWinner) {
+    if (wasWinner) {
+      if (team.teamWins > 0) {
+        team.teamWins -= 1;
+      }
+    } else {
+      if (team.teamLosses > 0) {
+        team.teamLosses -= 1;
+      }
+    }
+  }
+
+  void _applyOutcome(dynamic team, bool isWinner) {
+    if (isWinner) {
+      team.teamWinsADebate();
+    } else {
+      team.teamLosesADebate();
+    }
   }
 
   Widget _buildScoreField(TextEditingController controller, String label) {

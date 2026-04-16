@@ -21,6 +21,14 @@ class DebateMatch {
 
   void submitScores(List<int> scoresA, List<int> scoresB, int rebA, int rebB,
       Tournament tournament) {
+    final int totalA = scoresA[0] + scoresA[1] + scoresA[2] + rebA;
+    final int totalB = scoresB[0] + scoresB[1] + scoresB[2] + rebB;
+
+    // Reject ties before mutating any score/win-loss state.
+    if (totalA == totalB) {
+      throw Exception("Both teams can't have the same total score.");
+    }
+
     // Update team members' scores in the match
     for (int i = 0; i < 3; i++) {
       teamA.teamMembers[i].increaseIndividualScore(scoresA[i]);
@@ -58,9 +66,6 @@ class DebateMatch {
       orElse: () => teamB,
     );
 
-    int totalA = scoresA[0] + scoresA[1] + scoresA[2] + rebA;
-    int totalB = scoresB[0] + scoresB[1] + scoresB[2] + rebB;
-
     // Update both match teams and tournament teams
     tournamentTeamA.increaseTeamScore(totalA);
     tournamentTeamB.increaseTeamScore(totalB);
@@ -75,9 +80,6 @@ class DebateMatch {
       teamA.teamLosesADebate();
       tournamentTeamB.teamWinsADebate();
       tournamentTeamA.teamLosesADebate();
-    } else {
-      throw Exception(
-          "Check Tie: ${teamA.teamName} scores $totalA vs ${teamB.teamName} scores $totalB");
     }
 
     // Store the individual scores for this match

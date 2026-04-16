@@ -1,0 +1,430 @@
+TABDEB: A Debate Tournament Manager Application with Advanced AI Features
+Project Report
+
+Submitted To:
+[Insert supervisor name]
+
+Submitted By:
+[Insert student name or group name]
+
+Institution:
+Mawlana Bhashani Science and Technology University
+Santosh-1902
+
+Course:
+Software Development Project-II & Industrial Tour
+Course Code: CSE3116
+
+Submission Date:
+[Insert final submission date]
+
+------------------------------------------------------------
+ABSTRACT
+------------------------------------------------------------
+TabDeb is a cross-platform debate tournament management system developed to replace manual and error-prone tournament handling methods with a digital, integrated, and automated workflow. The application supports account management, tournament creation, team registration, round configuration, matchup generation, score submission, standings calculation, reporting, time keeping, and AI-assisted speech processing. It was designed for debate organizers, tab directors, adjudicators, and participants who need a reliable and structured way to manage tournament operations.
+
+The system is implemented using Flutter and Dart for the client application, Firebase Authentication and Cloud Firestore for secure user and data management, and Firebase Hosting for web deployment. In addition, the speech workflow integrates recording, transcription, summarization, and PDF export so that debate speeches can be documented more efficiently. The final result is a practical platform that reduces manual work, improves fairness, and preserves tournament data in a structured and reusable form.
+
+[Insert Figure A1: Full application overview screenshot or architecture illustration here]
+
+------------------------------------------------------------
+1. INTRODUCTION
+------------------------------------------------------------
+Debate tournaments require careful coordination of participants, rounds, scores, room assignments, rankings, and official records. In traditional practice, much of this work is handled manually through spreadsheets, paper records, or fragmented digital files. As the number of teams and rounds increases, the likelihood of delay, inconsistency, and calculation errors also increases.
+
+TabDeb was developed to solve these issues by digitizing the full debate tournament workflow. The application brings together registration, tournament setup, matchup creation, score processing, ranking, and reporting in one application. It also includes a smart speech workflow that records debate speeches, converts them to text, and generates summaries for easier adjudication and documentation.
+
+The project was originally proposed as a debate management platform with AI features, and the finished application reflects that goal by providing both tournament tabulation tools and speech-processing support.
+
+[Insert Figure 1: Problem context or manual workflow comparison here]
+
+------------------------------------------------------------
+2. PROBLEM STATEMENT
+------------------------------------------------------------
+Manual debate tournament management creates several practical problems. Matchups must be generated carefully to ensure fairness. Scores must be recorded accurately and computed consistently. Tournament data must be preserved for later review. Adjudicators also need a reliable way to document speeches and track speaking performance.
+
+Without a centralized system, organizers often rely on multiple documents and manual calculations. This slows down operations and can lead to errors in pairings, ranking updates, and final results. The lack of a unified platform also makes it difficult to manage tournament history, team statistics, speaker statistics, and speech records.
+
+TabDeb addresses these issues by providing a structured digital system that handles tournament lifecycle operations and speech documentation in a single environment.
+
+------------------------------------------------------------
+3. PROJECT OBJECTIVES
+------------------------------------------------------------
+The project was developed with the following objectives.
+
+The first objective was to automate debate tournament management so that organizers can create and পরিচালate tournaments through a user-friendly mobile interface.
+
+The second objective was to reduce manual errors by automating score calculation, ranking updates, matchup generation, and round progression.
+
+The third objective was to provide real-time visibility into team and debater performance so that tournament data can be reviewed immediately after each round.
+
+The fourth objective was to preserve tournament records in structured digital form so that historical data can be accessed later for analysis or reporting.
+
+The fifth objective was to integrate AI-assisted speech processing for recording, transcription, summarization, and PDF-based reporting.
+
+------------------------------------------------------------
+4. PROJECT SCOPE
+------------------------------------------------------------
+The scope of TabDeb covers the major operational needs of a debate tournament.
+
+It supports user account creation, login, guest access, and profile management.
+
+It supports tournament creation with metadata such as tournament name, club name, date range, format, location, description, prize pool, and team limit.
+
+It supports team registration, team editing, team removal, and team locking before tournament rounds begin.
+
+It supports roadmap configuration so that the organizer can define the sequence of rounds from preliminary stages to elimination stages.
+
+It supports matchup generation, score submission, editing of scores, ranking calculation, and elimination or closure of the tournament depending on the stage.
+
+It supports AI speech recording, transcription, summarization, and PDF export.
+
+It also supports search and profile-based exploration features for users who do not run tournaments.
+
+[Insert Figure 2: Scope or module summary diagram here]
+
+------------------------------------------------------------
+5. SYSTEM OVERVIEW
+------------------------------------------------------------
+TabDeb is implemented as a Flutter application connected to Firebase services and a Python backend for the speech pipeline. The overall system is divided into two major operational layers.
+
+The first layer is the tournament management layer, which handles users, tournaments, teams, rounds, matchups, scoring, rankings, and reporting.
+
+The second layer is the AI speech workflow, which handles audio recording, backend job creation, audio upload, transcription polling, summarization, and result export.
+
+These layers are connected through shared authentication and persistent cloud data storage.
+
+The system is designed to be usable on mobile devices and web platforms, and it follows a modular structure so that each major feature can operate independently while still remaining part of one integrated system.
+
+[Insert Figure 3: System architecture diagram here]
+
+------------------------------------------------------------
+6. SOFTWARE TECHNOLOGIES USED
+------------------------------------------------------------
+Frontend:
+Flutter, Dart
+
+Backend:
+Python, FastAPI
+
+Database:
+Cloud Firestore
+
+Authentication:
+Firebase Authentication
+
+Hosting:
+Firebase Hosting
+
+Speech Processing:
+OpenAI Whisper API for transcription, AI summarization service for summary generation
+
+Reporting:
+PDF generation libraries in Flutter
+
+Development Environment:
+Visual Studio Code, Android Studio, Firebase CLI
+
+Version Control:
+Git
+
+------------------------------------------------------------
+7. PROJECT ARCHITECTURE
+------------------------------------------------------------
+The application follows a layered and modular architecture.
+
+The model layer contains the domain entities used by the application. These include users, tournaments, tournament segments, teams, debaters, debate matches, speech jobs, and app statistics.
+
+The screen layer contains the user interfaces used for login, registration, dashboard navigation, tournament creation, tournament management, match score submission, summarization, and result presentation.
+
+The service layer handles business logic, data operations, matchup generation, speech API communication, polling, and PDF generation.
+
+The backend layer handles speech job creation, status tracking, transcription, and summarization.
+
+The cloud layer stores authentication data, tournament data, app statistics, speech jobs, and uploaded audio files.
+
+[Insert Figure 4: Layered architecture diagram here]
+
+------------------------------------------------------------
+8. CORE MODULES OF THE IMPLEMENTED SYSTEM
+------------------------------------------------------------
+8.1 Account Management Module
+
+This module handles registration, login, guest access, and profile-related operations.
+
+During registration, users provide details such as name, user ID, email, password, and optional profile information. The application verifies that the selected user ID is unique before creating the account. User records are stored in Firestore, while authentication is handled through Firebase Authentication.
+
+During login, the application first looks up the user ID in Firestore, retrieves the associated email address, and then signs the user in through Firebase Authentication. This approach allows the system to support a username-based login experience while still using email-based authentication in the backend.
+
+Guests can access limited browsing features without full account privileges.
+
+[Insert Figure 5: Registration screen screenshot here]
+[Insert Figure 6: Login screen screenshot here]
+
+8.2 Dashboard and Navigation Module
+
+The dashboard serves as the central entry point after authentication. It provides quick access to the main features of the application.
+
+Registered users can create tournaments, manage their own tournaments, use the time keeping module, access AI summarization, search tournaments, and search debaters.
+
+Guest users are limited to browsing and search-related functions.
+
+This role-based navigation model keeps the application structured and prevents unauthorized access to tournament management actions.
+
+[Insert Figure 7: Dashboard screenshot here]
+
+8.3 Tournament Creation Module
+
+The tournament creation screen allows organizers to define the main properties of a tournament. These properties include tournament name, club or organizing body, location, description, date range, format, prize pool, and maximum number of teams.
+
+When a tournament is saved, the system creates a unique tournament ID, stores the tournament in Firestore, increments the application statistics, and updates the creator's running-tournament list.
+
+This module forms the entry point for the tournament lifecycle.
+
+[Insert Figure 8: Tournament creation screen screenshot here]
+
+8.4 Tournament Management Module
+
+The tournament management area is one of the most important parts of the application. It loads tournaments that the current user created or co-owns and displays them in a searchable list.
+
+Each tournament can be edited, deleted, viewed in detail, or opened for further operations depending on its state.
+
+The tournament management workflow is state-based. If team addition is still open, the organizer can add or edit teams. If the roadmap is not yet locked, the organizer can configure the sequence of rounds. Once both of these steps are completed, the application can generate matchups for the active segment.
+
+The management module therefore acts as the control center for the tournament lifecycle.
+
+[Insert Figure 9: My Tournaments screen screenshot here]
+
+8.5 Team Management Module
+
+Teams are added with exactly three debaters per team in the implemented workflow. The organizer can create a team, edit team information, or remove a team before locking the tournament registration stage.
+
+When team registration is locked, the application updates the tournament state and records the number of teams and debaters handled by the application statistics module.
+
+This module ensures that tournament membership is properly controlled before rounds begin.
+
+[Insert Figure 10: Add Teams screen screenshot here]
+
+8.6 Roadmap Configuration Module
+
+The roadmap module allows the organizer to define the tournament segment sequence. The application supports standard round names such as preliminary rounds and elimination rounds, as well as custom segments.
+
+Each segment stores information such as its name, segment ID, the number of teams in that segment, the number of auto-qualified teams, and whether it is a tab round or elimination round.
+
+Once the roadmap is saved, it becomes locked so that the tournament structure cannot be changed later.
+
+[Insert Figure 11: Roadmap configuration screen screenshot here]
+
+8.7 Matchup Generation Module
+
+The matchup generation logic creates debate pairings for the current segment. The tournament model contains the actual generation algorithm, which considers tournament stage, team status, prior performance, and side balancing.
+
+In preliminary rounds, teams are paired in a way that supports balanced distribution. In later rounds, the application uses performance-based logic so that stronger teams are paired appropriately.
+
+The system also assigns debate sides, sets venue numbers, and records any auto-qualified teams where applicable.
+
+This module is central to the fairness and efficiency of the tournament system.
+
+[Insert Figure 12: Generated matchups screen screenshot here]
+
+8.8 Score Submission and Results Module
+
+After a debate round, adjudicators can submit scores for both teams. The application records individual speaker scores and rebuttal scores, calculates team totals, updates wins and losses, and marks the match as completed.
+
+The score submission workflow also supports editing scores later if corrections are needed.
+
+Because the system updates both match-level data and tournament-level data, rankings stay synchronized across the whole application.
+
+[Insert Figure 13: Score submission screen screenshot here]
+[Insert Figure 14: Completed match results screenshot here]
+
+8.9 Ranking and Analytics Module
+
+The application keeps track of team ranking, debater ranking, wins, losses, and accumulated scores.
+
+It uses the stored tournament data to show top teams and top debaters after each round or at the end of the tournament.
+
+The application statistics module also tracks platform-level totals such as tournaments created, teams handled, debaters handled, and users registered.
+
+This provides a broader administrative view of system usage.
+
+[Insert Figure 15: Team ranking or leaderboard screenshot here]
+[Insert Figure 16: Debater ranking screenshot here]
+
+8.10 Reporting Module
+
+The reporting module generates PDF documents that can be used as official round records or final performance summaries.
+
+The implemented application supports PDF generation for matchups, team rankings, and debater rankings.
+
+These reports make it easier for organizers to distribute results and maintain records outside the application.
+
+[Insert Figure 17: Generated PDF report screenshot here]
+
+8.11 Time Keeping Module
+
+The time keeping module provides a smart stopwatch-style utility that can support adjudicators during debate sessions.
+
+This feature helps ensure that speeches remain within the time limits defined by the tournament format.
+
+[Insert Figure 18: Timer screen screenshot here]
+
+8.12 AI Speech Processing Module
+
+This module is one of the most advanced parts of the project. It allows the user to record a speech, upload the audio to a backend job pipeline, track transcription status, and generate a summary from the resulting transcript.
+
+The speech workflow begins on the Flutter side when the user records audio. The application then creates a speech job through the backend API, uploads the audio to the signed storage URL, and repeatedly polls the backend until transcription is complete.
+
+Once transcription is finished, the user can open the speech result screen and request summarization. After the summarization process completes, the summary can be viewed and exported to PDF.
+
+This workflow reduces the burden of manual note-taking and improves speech documentation during debate rounds.
+
+[Insert Figure 19: Speech recording screen screenshot here]
+[Insert Figure 20: Speech result screen screenshot here]
+[Insert Figure 21: Summary PDF screenshot here]
+
+------------------------------------------------------------
+9. DATA MODEL SUMMARY
+------------------------------------------------------------
+The main project entities are User, App, Tournament, TournamentSegment, DebateTeam, Debater, DebateMatch, and SpeechJob.
+
+The User class stores personal account information and the list of tournaments the user runs.
+
+The App class stores global platform statistics such as tournament count and user count.
+
+The Tournament class stores all tournament-related metadata, round information, team lists, debater lists, co-owner information, and lock states.
+
+The TournamentSegment class stores the structure of each tournament round or stage.
+
+The DebateTeam class stores team identity, members, scores, and record information.
+
+The Debater class stores speaker identity and individual performance scores.
+
+The DebateMatch class stores the two teams in a match, their scores, rebuttal marks, completion status, and venue.
+
+The SpeechJob class stores the processing lifecycle of recorded speeches.
+
+[Insert Figure 22: Class diagram here]
+
+------------------------------------------------------------
+10. DATABASE AND STORAGE DESIGN
+------------------------------------------------------------
+Firestore is used as the main data store for the application.
+
+User documents are stored under the users collection.
+
+Tournament documents are stored under the tournaments collection.
+
+Application-level statistics are stored under the app_statistics collection.
+
+Speech jobs are stored in both a top-level speech_jobs collection and a user-specific subcollection so that both general monitoring and personal access remain efficient.
+
+Uploaded speech audio files are stored in Firebase Storage using a structured path convention based on user ID and job ID.
+
+This design supports both structured retrieval and scalable cloud storage management.
+
+[Insert Figure 23: Firestore schema illustration here]
+
+------------------------------------------------------------
+11. IMPLEMENTATION HIGHLIGHTS
+------------------------------------------------------------
+The project preserves the key logic of debate tournament tabulation while modernizing the user experience through Flutter.
+
+The app supports tournament status-based actions, meaning that users can only perform the operations that are valid for the current state of the tournament.
+
+The matchup system automatically produces round pairings and carries tournament state forward through the segment sequence.
+
+The scoring system updates both match records and tournament-wide records so that rankings remain accurate.
+
+The speech workflow uses a backend job model instead of a single blocking request, which makes transcription and summarization more scalable and easier to monitor.
+
+The implementation also supports co-owner management so that multiple authorized users can work on the same tournament.
+
+------------------------------------------------------------
+12. TESTING AND VALIDATION
+------------------------------------------------------------
+The project was developed with testing in mind at both the module level and the workflow level.
+
+Functional checks were carried out for account handling, tournament creation, team locking, roadmap setup, score submission, and summary generation.
+
+The application logic was also verified against expected state transitions so that round progression, tournament closure, and speech job status updates behave consistently.
+
+The report-ready testing structure can be summarized as follows:
+
+Unit testing for isolated model and helper logic.
+Integration testing for communication between screens, services, Firestore, and backend APIs.
+User acceptance testing for real tournament workflows.
+Performance checks for handling tournament data and speech workflow polling.
+
+[Insert Figure 24: Testing evidence or validation screenshot here]
+
+------------------------------------------------------------
+13. CHALLENGES AND LIMITATIONS
+------------------------------------------------------------
+During development, several practical issues had to be addressed.
+
+One challenge was preserving a clear tournament state flow so that users do not skip required steps.
+
+Another challenge was maintaining consistent scoring updates between match-level objects and tournament-level records.
+
+For the speech workflow, the application had to handle asynchronous backend status changes, upload delays, and failure states cleanly.
+
+The current system is already functional, but future versions can improve advanced analytics, reporting flexibility, and tournament visualization.
+
+------------------------------------------------------------
+14. FUTURE IMPROVEMENTS
+------------------------------------------------------------
+The project can be extended in several directions.
+
+Future work may include deeper analytics dashboards, more advanced power-pairing algorithms, live result updates, richer tournament templates, speaker feedback tools, and stronger visualization of historical tournament data.
+
+The AI workflow can also be improved by adding better summary templates, multilingual support, and enhanced speech metadata tracking.
+
+------------------------------------------------------------
+15. CONCLUSION
+------------------------------------------------------------
+TabDeb successfully transforms the debate tournament management process into a structured digital workflow. The application reduces manual tabulation effort, improves pairing and scoring reliability, preserves tournament records, and introduces AI-assisted speech documentation as an additional value layer.
+
+The project demonstrates that a well-designed Flutter and Firebase solution can support both operational management and intelligent speech processing in a single platform. It is suitable for debate societies, educational institutions, and tournament organizers who need a practical and modern tabulation tool.
+
+The final system is not only a replacement for manual methods but also a foundation for future debate technology features.
+
+------------------------------------------------------------
+REFERENCES
+------------------------------------------------------------
+1. Flutter Documentation
+2. Firebase Documentation
+3. OpenAI Whisper API Documentation
+4. Debate format guidelines and academic references
+5. Project proposal and development notes used during implementation
+
+------------------------------------------------------------
+IMAGE PLACEHOLDER GUIDE
+------------------------------------------------------------
+Place screenshots or figures in the following locations:
+- Figure 1: Problem context or manual workflow comparison
+- Figure 2: Scope or module summary diagram
+- Figure 3: System architecture diagram
+- Figure 4: Layered architecture diagram
+- Figure 5: Registration screen
+- Figure 6: Login screen
+- Figure 7: Dashboard screen
+- Figure 8: Tournament creation screen
+- Figure 9: My Tournaments screen
+- Figure 10: Add Teams screen
+- Figure 11: Roadmap configuration screen
+- Figure 12: Generated matchups screen
+- Figure 13: Score submission screen
+- Figure 14: Completed match results screen
+- Figure 15: Team ranking screen
+- Figure 16: Debater ranking screen
+- Figure 17: Generated PDF report
+- Figure 18: Timer screen
+- Figure 19: Speech recording screen
+- Figure 20: Speech result screen
+- Figure 21: Summary PDF screen
+- Figure 22: Class diagram
+- Figure 23: Firestore schema illustration
+- Figure 24: Testing evidence or validation screenshot
+
+End of Report
