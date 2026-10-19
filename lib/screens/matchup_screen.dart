@@ -1267,12 +1267,12 @@ class _MatchupScreenState extends State<MatchupScreen> {
 
               try {
                 if (isEditing) {
-                  _editMatchScores(
-                    match,
+                  match.updateScores(
                     parsedGovScores.take(3).cast<int>().toList(),
                     parsedOppScores.take(3).cast<int>().toList(),
                     parsedGovScores[3]!,
                     parsedOppScores[3]!,
+                    widget.currentTournament,
                   );
                 } else {
                   match.submitScores(
@@ -1332,131 +1332,9 @@ class _MatchupScreenState extends State<MatchupScreen> {
     );
   }
 
-  void _editMatchScores(
-    DebateMatch match,
-    List<int> newGovDebScores,
-    List<int> newOppDebScores,
-    int newGovRebuttal,
-    int newOppRebuttal,
-  ) {
-    final newGovTotal = _calculateTeamTotal(newGovDebScores, newGovRebuttal);
-    final newOppTotal = _calculateTeamTotal(newOppDebScores, newOppRebuttal);
-
-    if (newGovTotal == newOppTotal) {
-      throw Exception("Both teams can't have the same total score.");
-    }
-
-    // Get old scores to calculate the difference
-    final oldGovDebScores = match.teamAScores;
-    final oldOppDebScores = match.teamBScores;
-    final oldGovRebuttal = match.teamARebuttal;
-    final oldOppRebuttal = match.teamBRebuttal;
-
-    // Calculate old totals (including rebuttal)
-    final oldGovTotal = _calculateTeamTotal(oldGovDebScores, oldGovRebuttal);
-    final oldOppTotal = _calculateTeamTotal(oldOppDebScores, oldOppRebuttal);
-    final oldWinner = _getWinner(oldGovTotal, oldOppTotal);
-    final newWinner = _getWinner(newGovTotal, newOppTotal);
-
-    // Update individual debater scores
-    for (int i = 0; i < 3; i++) {
-      final scoreDifA = newGovDebScores[i] - oldGovDebScores[i];
-      final scoreDifB = newOppDebScores[i] - oldOppDebScores[i];
-
-      match.teamA.teamMembers[i].increaseIndividualScore(scoreDifA);
-      match.teamB.teamMembers[i].increaseIndividualScore(scoreDifB);
-
-      // Update tournament debaters list
-      final debaterAId = match.teamA.teamMembers[i].debaterID;
-      final debatersList =
-          widget.currentTournament.debatersInTheTournament ?? [];
-      final tournamentDebaterA = debatersList.firstWhere(
-        (d) => d.debaterID == debaterAId,
-        orElse: () => match.teamA.teamMembers[i],
-      );
-      tournamentDebaterA.increaseIndividualScore(scoreDifA);
-
-      final debaterBId = match.teamB.teamMembers[i].debaterID;
-      final tournamentDebaterB = debatersList.firstWhere(
-        (d) => d.debaterID == debaterBId,
-        orElse: () => match.teamB.teamMembers[i],
-      );
-      tournamentDebaterB.increaseIndividualScore(scoreDifB);
-    }
-
-    // Update team scores by removing old total and adding new total
-    final teamScoreDifA = newGovTotal - oldGovTotal;
-    final teamScoreDifB = newOppTotal - oldOppTotal;
-
-    match.teamA.increaseTeamScore(teamScoreDifA);
-    match.teamB.increaseTeamScore(teamScoreDifB);
-
-    // Update tournament teams list
-    final teamsList = widget.currentTournament.teamsInTheTournament ?? [];
-    final tournamentTeamA = teamsList.firstWhere(
-      (t) => t.teamID == match.teamA.teamID,
-      orElse: () => match.teamA,
-    );
-    final tournamentTeamB = teamsList.firstWhere(
-      (t) => t.teamID == match.teamB.teamID,
-      orElse: () => match.teamB,
-    );
-
-    tournamentTeamA.increaseTeamScore(teamScoreDifA);
-    tournamentTeamB.increaseTeamScore(teamScoreDifB);
-
-    if (oldWinner != newWinner) {
-      _removePreviousOutcome(match.teamA, oldWinner == 'A');
-      _removePreviousOutcome(match.teamB, oldWinner == 'B');
-      _applyOutcome(match.teamA, newWinner == 'A');
-      _applyOutcome(match.teamB, newWinner == 'B');
-
-      if (!identical(tournamentTeamA, match.teamA)) {
-        _removePreviousOutcome(tournamentTeamA, oldWinner == 'A');
-        _applyOutcome(tournamentTeamA, newWinner == 'A');
-      }
-      if (!identical(tournamentTeamB, match.teamB)) {
-        _removePreviousOutcome(tournamentTeamB, oldWinner == 'B');
-        _applyOutcome(tournamentTeamB, newWinner == 'B');
-      }
-    }
-
-    // Update match scores and rebuttal scores
-    match.teamAScores = newGovDebScores;
-    match.teamBScores = newOppDebScores;
-    match.teamARebuttal = newGovRebuttal;
-    match.teamBRebuttal = newOppRebuttal;
-  }
-
   int _calculateTeamTotal(List<int> speechScores, int rebuttalScore) {
     return speechScores.fold<int>(0, (sum, score) => sum + score) +
         rebuttalScore;
-  }
-
-  String _getWinner(int totalA, int totalB) {
-    if (totalA > totalB) return 'A';
-    if (totalB > totalA) return 'B';
-    throw Exception("Both teams can't have the same total score.");
-  }
-
-  void _removePreviousOutcome(dynamic team, bool wasWinner) {
-    if (wasWinner) {
-      if (team.teamWins > 0) {
-        team.teamWins -= 1;
-      }
-    } else {
-      if (team.teamLosses > 0) {
-        team.teamLosses -= 1;
-      }
-    }
-  }
-
-  void _applyOutcome(dynamic team, bool isWinner) {
-    if (isWinner) {
-      team.teamWinsADebate();
-    } else {
-      team.teamLosesADebate();
-    }
   }
 
   Widget _buildScoreField(TextEditingController controller, String label) {
